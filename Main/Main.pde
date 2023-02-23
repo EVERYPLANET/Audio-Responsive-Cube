@@ -32,13 +32,66 @@ AudioPlayer ap;
 AudioInput ai;
 AudioBuffer ab;
 
+float average = 0;
+float lerpedAverage = 0;
+
+ArrayList<cube> cubes = new ArrayList<cube>();
+int numCubes = 0;
+
+void keyPressed(){
+  if(key > '0' && key < '9'){
+    numCubes = key - '0';
+    makeCubes(numCubes);
+  }
+}
+
+void makeCubes(int count){
+  cubes.clear();
+  float halfW = width/2;
+  float halfH = height/2;
+  for (int i = 0; i < count; i++){
+    float theta = map(i, 0, count, 0 , TWO_PI);
+    float x = halfW + sin(theta) * 400;
+    float y = halfH - cos(theta)*400;
+    cube lilBox = new cube(0, 0, 0, 0, x, y);
+    cubes.add(lilBox);  
+  }
+}
+
 void draw() {
+  
+  float total = 0;
+  
+  for(int i = 0; i < ab.size(); i++){
+    total += abs(ab.get(i));
+  }
+  
+  average = total / (float) ab.size();
+  lerpedAverage = lerp(lerpedAverage, average, 0.1f);
+  
   background(0);
   noStroke();
   //stroke(255);
   //strokeWeight(2);
   
   lights();
+  
+  float hue = map(lerpedAverage,0.0f, 1.0f, 150,255);
+  color c = color(hue,255,255);
+  
+  ///scale(zoom, zoom);
+  
+  box.speed = map(lerpedAverage, 0.0f, 1.0f, 0, 0.1);
+  betterBox.speed = map(lerpedAverage, 0.0f, 1.0f, 0, 0.08);
+  evenBetterBox.speed = map(lerpedAverage, 0.0f, 1.0f, 0, 0.13);
+  
+  box.size = map(lerpedAverage, 0.0f, 1.0f, 80, 370);
+  betterBox.size = map(lerpedAverage, 0.0f, 1.0f, 10, 180);
+  evenBetterBox.size = map(lerpedAverage, 0.0f, 1.0f, 180, 650 );
+  
+  box.c = c;
+  betterBox.c = c;
+  evenBetterBox.c = c;
   
   box.update();
   box.render();
@@ -49,6 +102,16 @@ void draw() {
   evenBetterBox.update();
   evenBetterBox.render();
   
+  for(int i = 0; i < cubes.size(); i++){
+    cube current = cubes.get(i);
+    current.speed = map(lerpedAverage, 0.0f, 1.0f, 0, 0.08);
+    current.size = map(lerpedAverage, 0.0f, 1.0f, 10, 180);
+    current.c = c;
+    
+    current. update();
+    current.render();
+    
+  }
 
   
 }

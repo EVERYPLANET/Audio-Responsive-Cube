@@ -28,7 +28,7 @@
     {
       pushMatrix();
       
-      stroke(255);
+      stroke(c);
       strokeWeight(2);
       noFill();
       
