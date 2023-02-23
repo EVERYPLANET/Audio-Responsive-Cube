@@ -18,9 +18,6 @@ void setup() {
   ap = minim.loadFile("C:\\Users\\every\\Downloads\\btbp2.mp3", 512);
   ap.play();
   ab = ap.mix;
-  
-  
-  
 }
 
 float theta = 0;
@@ -101,10 +98,12 @@ void draw() {
   
   evenBetterBox.update();
   evenBetterBox.render();
-  
+
   for(int i = 0; i < cubes.size(); i++){
+    
+    
     cube current = cubes.get(i);
-    current.speed = map(lerpedAverage, 0.0f, 1.0f, 0, 0.08);
+    current.speed = map(lerpedAverage, 0.0f, 1.0f, 0, 0.1) + random(-0.02,0.02);
     current.size = map(lerpedAverage, 0.0f, 1.0f, 10, 180);
     current.c = c;
     
